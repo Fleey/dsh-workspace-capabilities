@@ -48,6 +48,7 @@ dsh plugin --profile web add github:Fleey/dsh-workspace-capabilities
 - 依赖 DSH 0.2 内部结构（侧栏菜单 DOM、技能注册表 `collectFresh`）。DSH 升级后若这些变化，菜单项可能不出现或技能过滤失效（会在日志中警告），MCP 过滤走的是公开 API。
 - 被禁用的 MCP 服务器若返回了服务器指令（instructions），该文本仍会出现在系统提示词中；只是工具不可用。
 - 列表中的技能按当前工作区路径发现；只在其他 agent preset 中挂载的技能可能不显示。
+- 本插件只能**隐藏**技能，不能启用在来源处被停用的技能。例如在 dsh-skills-manager 中停用的技能仍会出现在列表里，但会标为「来源已停用」且无法勾选；需先在技能管理器中重新启用。
 
 ## 测试
 
