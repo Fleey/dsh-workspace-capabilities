@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { mcpServerOf, normalizePath, normalizeState } from '../lib/index.js'
+import { mcpServerOf, normalizePath, normalizeState, skillRow } from '../lib/index.js'
 
 test('mcpServerOf splits mcp__<server>__<tool>', () => {
   assert.equal(mcpServerOf('mcp__github__create_issue'), 'github')
@@ -28,4 +28,12 @@ test('normalizeState dedupes, sorts and drops empty or malformed entries', () =>
   })
   assert.deepEqual(state, { version: 1, workspaces: { '/w1': { disabledSkills: ['a', 'b'], disabledMcpServers: ['x'] } } })
   assert.deepEqual(normalizeState(null), { version: 1, workspaces: {} })
+})
+
+test('skillRow carries the candidate invocation policy', () => {
+  const provider = { name: 'dsh-skills-manager-external' }
+  const off = skillRow({ candidate: { name: 'a', description: 'd', invocation: { modelInvocable: false, userInvocable: false } }, provider })
+  assert.deepEqual(off, { name: 'a', description: 'd', provider: 'dsh-skills-manager-external', modelInvocable: false, userInvocable: false })
+  const plain = skillRow({ candidate: { name: 'b' }, provider: undefined })
+  assert.deepEqual(plain, { name: 'b', description: '', provider: '', modelInvocable: true, userInvocable: true })
 })
