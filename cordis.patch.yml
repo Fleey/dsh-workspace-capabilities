@@ -1,0 +1,7 @@
+# dsh-workspace-capabilities bundle layer: mount the per-workspace
+# skill / MCP selector. Selections are made from the workspace row's
+# "..." menu and stored in $DSH_HOME/workspace-capabilities.json,
+# so there is nothing to configure here.
+- insert:
+    - id: workspace-capabilities
+      name: dsh-workspace-capabilities
