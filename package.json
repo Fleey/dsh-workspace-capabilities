@@ -43,13 +43,5 @@
   },
   "scripts": {
     "test": "node --test test/*.test.mjs"
-  },
-  "peerDependencies": {
-    "@deepseek-ai/cordis": "*"
-  },
-  "peerDependenciesMeta": {
-    "@deepseek-ai/cordis": {
-      "optional": true
-    }
   }
 }
