@@ -4,6 +4,15 @@
 
 在侧栏工作区行的「…」菜单里多一项 **技能与 MCP**，点击后弹出窗口，勾选该工作区要用的技能和 MCP 服务器。取消勾选的项目不会提供给该工作区的会话，从下一轮对话起生效，无需重启。
 
+## 插件界面
+
+<img width="858" height="398" alt="image" src="https://github.com/user-attachments/assets/b0789b15-1544-4557-a326-6c299ba86742" />
+
+支持在工作区里面设置skill与mcp，可以有效的规避工具上下文占用或其他特需需求场景
+
+<img width="1698" height="1754" alt="image" src="https://github.com/user-attachments/assets/f76b47ef-6ad0-48df-a8a2-6dfaee635c5f" />
+
+
 ## 行为
 
 - **技能**：取消勾选的技能从会话的技能目录中消失，`skill` 工具和 `/技能名` 都无法再加载它。
