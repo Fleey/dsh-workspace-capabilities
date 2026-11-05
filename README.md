@@ -34,7 +34,7 @@
 先退出桌面版 DSH NEXT，然后：
 
 ```bash
-ELECTRON_RUN_AS_NODE=1 DSH_HOME="$HOME/.dsh" "/Applications/DSH NEXT.app/Contents/MacOS/DSH NEXT" --expose-internals "/Applications/DSH NEXT.app/Contents/Resources/app/lib/plugin-cli.js" desktop add github:Fleey/dsh-workspace-capabilities
+ELECTRON_RUN_AS_NODE=1 DSH_HOME="$HOME/.dsh" "/Applications/DSH NEXT.app/Contents/MacOS/DSH NEXT" --expose-internals "/Applications/DSH NEXT.app/Contents/Resources/app.asar/lib/plugin-cli.js" desktop add github:Fleey/dsh-workspace-capabilities
 ```
 
 重新打开 DSH NEXT 即可。卸载把 `add github:...` 换成 `remove dsh-workspace-capabilities`。本地开发可改用 `add link:/path/to/clone`。
@@ -47,14 +47,14 @@ dsh plugin --profile web add github:Fleey/dsh-workspace-capabilities
 
 ## 实现说明
 
-- 工作区「…」菜单是写死的两项（重命名 / 删除），没有扩展 slot，所以浏览器端通过 DOM 注入：菜单弹出时复制「重命名」一行并插入，点击后关闭菜单并打开对话框（`lib/client.js`）。
+- DSH 0.2.2 起工作区「…」菜单由 `ctx.contextMenus` 组成，浏览器端注册一条 `target: "workspace"` 的菜单项（`order: 250`，位于「在访达中显示」与「删除」之间）。更早的版本菜单写死为两项（重命名 / 删除），没有扩展点，此时回退为 DOM 注入：菜单弹出时复制「重命名」一行并插入；`contextMenus` 服务一出现，DOM 回退即停用（`lib/client.js`）。
 - 技能注册表没有过滤钩子，Host 端包装了注册表的 `collectFresh`，按查询的 `cwd` 去掉禁用的技能；注册表缓存本来就按 `cwd` 区分（`lib/index.js`）。
 - MCP 通过 `agent.ctx.tools.restrict({ deny })` 对每个会话屏蔽工具，工具集合或选择变化时自动重算。
 - 接口：`GET /dsh-workspace-capabilities/state?workspaceId=`、`POST /dsh-workspace-capabilities/save`，走 Host 自己的请求鉴权。
 
 ## 限制
 
-- 依赖 DSH 0.2 内部结构（侧栏菜单 DOM、技能注册表 `collectFresh`）。DSH 升级后若这些变化，菜单项可能不出现或技能过滤失效（会在日志中警告），MCP 过滤走的是公开 API。
+- 技能过滤依赖 DSH 0.2 内部结构（技能注册表 `collectFresh`），DSH 0.2.1 及更早版本的菜单项还依赖侧栏菜单 DOM。DSH 升级后若这些变化，菜单项可能不出现或技能过滤失效（会在日志中警告）；DSH 0.2.2+ 的菜单项和 MCP 过滤走的是公开 API。
 - 被禁用的 MCP 服务器若返回了服务器指令（instructions），该文本仍会出现在系统提示词中；只是工具不可用。
 - 列表中的技能按当前工作区路径发现；只在其他 agent preset 中挂载的技能可能不显示。
 - 本插件只能**隐藏**技能，不能启用在来源处被停用的技能。例如在 dsh-skills-manager 中停用的技能仍会出现在列表里，但会标为「来源已停用」且无法勾选；需先在技能管理器中重新启用。
