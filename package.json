@@ -1,6 +1,6 @@
 {
   "name": "dsh-workspace-capabilities",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "DeepSeek Harness plugin: choose which skills and MCP servers each workspace may use, from the workspace row's \"...\" menu.",
   "type": "module",
   "main": "lib/index.js",
@@ -37,6 +37,7 @@
     "client": {
       "platform": "web",
       "inject": [
+        "@deepseek-ai/dsh-client-ui-context-menu",
         "@deepseek-ai/dsh-client-ui-workspace"
       ]
     }
