@@ -26,8 +26,19 @@ test('normalizeState dedupes, sorts and drops empty or malformed entries', () =>
       '/w3': 'nope',
     },
   })
-  assert.deepEqual(state, { version: 1, workspaces: { '/w1': { disabledSkills: ['a', 'b'], disabledMcpServers: ['x'] } } })
+  assert.deepEqual(state, {
+    version: 1,
+    workspaces: { '/w1': { disabledSkills: ['a', 'b'], disabledMcpServers: ['x'], disabledTools: [] } },
+  })
   assert.deepEqual(normalizeState(null), { version: 1, workspaces: {} })
+})
+
+test('normalizeState keeps an entry that only disables tools', () => {
+  const state = normalizeState({ workspaces: { '/w': { disabledTools: ['workflow', 'workflow', ''] } } })
+  assert.deepEqual(state, {
+    version: 1,
+    workspaces: { '/w': { disabledSkills: [], disabledMcpServers: [], disabledTools: ['workflow'] } },
+  })
 })
 
 test('skillRow carries the candidate invocation policy', () => {
